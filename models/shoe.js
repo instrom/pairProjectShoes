@@ -1,13 +1,21 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const Shoe = sequelize.define('Shoe', {
-    name: DataTypes.STRING,
-    brand: DataTypes.STRING,
-    type: DataTypes.STRING,
-    price: DataTypes.INTEGER
-  }, {});
-  Shoe.associate = function(models) {
-    // associations can be defined here
-  };
+  class Shoe extends sequelize.Sequelize.Model {
+    static associate(models){
+      Shoe.belongsToMany(models.Order,{through: 'ShoesOrders'} )
+      Shoe.belongsTo(models.User)
+    }
+  }
+  Shoe.init({
+    username: DataTypes.STRING,
+    email: DataTypes.STRING,
+    password: DataTypes.STRING,
+    isAdmin: DataTypes.BOOLEAN,
+    balance: DataTypes.INTEGER
+  }, {
+    sequelize,
+    // options
+  });
+
   return Shoe;
 };
