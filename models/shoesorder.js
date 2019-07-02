@@ -1,13 +1,19 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const ShoesOrder = sequelize.define('ShoesOrder', {
+  class ShoesOrder extends sequelize.Sequelize.Model {
+    static associate(models){
+      ShoesOrder.belongsTo(models.Shoe)
+      ShoesOrder.belongsTo(models.Order)
+    }
+  }
+  ShoesOrder.init({
     OrderId: DataTypes.INTEGER,
     ShoeId: DataTypes.INTEGER,
     quantity: DataTypes.INTEGER,
     totalPrice: DataTypes.INTEGER
-  }, {});
-  ShoesOrder.associate = function(models) {
-    // associations can be defined here
-  };
+  }, {
+    sequelize,
+    // options
+  });
   return ShoesOrder;
 };

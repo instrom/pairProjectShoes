@@ -1,10 +1,18 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const Order = sequelize.define('Order', {
+
+  class Order extends sequelize.Sequelize.Model {
+    static associate(models){
+      Order.belongsToMany(models.Shoe,{through: 'ShoesOrders'} )
+      Order.belongsTo(models.User)
+    }
+  }
+  Order.init({
     UserId: DataTypes.INTEGER
-  }, {});
-  Order.associate = function(models) {
-    // associations can be defined here
-  };
+  }, {
+    sequelize,
+    // options
+  });
+
   return Order;
 };
