@@ -9,7 +9,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   User.init({
-    username: DataTypes.STRING,
+    username: {
+      type: DataTypes.STRING,
+      unique: true,
+    },
     email: {
       type: DataTypes.STRING,
       validate: {
@@ -17,7 +20,8 @@ module.exports = (sequelize, DataTypes) => {
           args: true,
           msg: 'email format is wrong'
         }
-      }
+      },
+      unique: true,
     },
     password: DataTypes.STRING,
     isAdmin: DataTypes.BOOLEAN,

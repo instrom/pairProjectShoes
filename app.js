@@ -8,7 +8,15 @@ app.use(express.urlencoded({ extended: false }));
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 var flash = require('express-flash')
   app.use(flash());
-  app.use(session({secret:'keyboard cat',resave:false,saveUninitialized:true}))
+app.use(session({
+  key: 'user_sid',
+  secret:'keyboard cat',
+  resave:false,
+  saveUninitialized:true,
+  cookie: {
+    maxAge: 10000000000000000000
+  }
+}))
 const shoesRouter = require('./routers/shoesRouter')
 const userRouter = require('./routers/userRouter')
 app.get("/", (req, res) => { // halaman home

@@ -1,4 +1,5 @@
 const Model = require('../models/index')
+const sessionChecker = require('../middlewares/sessionChecker')
 
 class UserController {
     static createUser(req,res) {
@@ -18,6 +19,14 @@ class UserController {
                 req.flash('errEmail',`${err.message}`)
                 res.redirect('/user/register')
             })
+    }
+
+    static loginUser(req,res) {
+        res.render('login.ejs')
+    }
+
+    static loginUserPost(req,res) {
+        
     }
 
 }
