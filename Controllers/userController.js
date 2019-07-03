@@ -1,5 +1,6 @@
 const Model = require('../models/index')
 const sessionChecker = require('../middlewares/sessionChecker')
+const bcrypt = require('bcrypt')
 
 class UserController {
     static createUser(req,res) {
@@ -26,7 +27,28 @@ class UserController {
     }
 
     static loginUserPost(req,res) {
-        
+        Model.User.findOne({where: {username: req.body.username}})
+            .then((user) => {
+                if(!user) {
+                    console.log('username tidak ada');
+                    res.redirect('/user/login')
+                } else if (!bcrypt.compareSync(req.body.password,user.password)) {
+                    console.log('password salah')
+                    res.redirect('/user/login')
+                } else {
+                    req.session.user = user.dataValues
+                    console.log(req.session.user)
+                    res.redirect('/user/dashboard')
+                }
+            })
+    }
+
+    static dashboard(req,res) {
+        if(req.session.user) {
+            res.render('dashboard.ejs')
+        } else {
+            res.redirect('/login')
+        }
     }
 
 }
