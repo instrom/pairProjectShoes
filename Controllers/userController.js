@@ -11,7 +11,9 @@ class UserController {
         Model.User.create({
             username: req.body.username,
             email:req.body.email,
-            password:req.body.password
+            password:req.body.password,
+            balance: 0,
+            isAdmin: false
         })
             .then((data) => {
                 res.redirect('/')
@@ -23,32 +25,66 @@ class UserController {
     }
 
     static loginUser(req,res) {
-        res.render('login.ejs')
+        res.render('login.ejs',{flash:req.flash('errLogin')})
     }
 
     static loginUserPost(req,res) {
         Model.User.findOne({where: {username: req.body.username}})
             .then((user) => {
                 if(!user) {
-                    console.log('username tidak ada');
                     res.redirect('/user/login')
+                    throw new Error(`username salah`)
                 } else if (!bcrypt.compareSync(req.body.password,user.password)) {
-                    console.log('password salah')
                     res.redirect('/user/login')
+                   throw new Error(`password salah`)
                 } else {
                     req.session.user = user.dataValues
                     console.log(req.session.user)
                     res.redirect('/user/dashboard')
                 }
             })
+            .catch((err) => {
+                req.flash('errLogin',`${err.message}`)
+            })
     }
 
     static dashboard(req,res) {
-        if(req.session.user) {
-            res.render('dashboard.ejs')
-        } else {
-            res.redirect('/login')
-        }
+        Model.User.findOne({
+            where: {
+                username: req.session.user.username
+            }
+        })
+            .then((dataUser) => {
+                res.render('dashboard.ejs',{dataUser:dataUser})
+            })
+            .catch((err) => {
+                res.send(err)
+            })
+    }
+    
+    static logout(req,res) {
+        req.session.destroy()
+        res.redirect('/');
+    }
+
+    static balancePage(req,res) {
+       Model.User.findByPk(req.params.id)
+        .then((dataUser) => {
+            res.render('balancePage.ejs',{dataUser:dataUser})
+        })
+        .catch((err) => {
+            res.send(err)
+        })
+    }
+
+    static balancePagePost(req,res) {
+        Model.User.increment(['balance'], {by:req.body.balance,where: {id:req.params.id}})
+            .then((data) => {
+                res.redirect(`/user/balance/${req.params.id}`)
+            })
+            .catch((err) => {
+                res.send(err)
+            })
     }
 
 }
