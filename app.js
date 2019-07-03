@@ -9,7 +9,6 @@ app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 var flash = require('express-flash')
   app.use(flash());
 app.use(session({
-  key: 'user_sid',
   secret:'keyboard cat',
   resave:false,
   saveUninitialized:true,
