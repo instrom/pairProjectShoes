@@ -79,22 +79,30 @@ class ShoesController {
     }
 
     static addToCart(req,res){
-        Model.ShoesUser.create({
-            UserId: req.session.user.id,
-            ShoeId: req.params.shoeId,
-            quantity: 1
+        Model.ShoesUser.findOrCreate({
+            where:{
+                UserId : req.session.user.id,
+                ShoeId : req.params.shoesId,
+            },
+            defaults:{
+                quantity : 1
+            }
         })
-        .then(shoes=>{
-            return Model.ShoesUser.findAll({
-                where:{
-                    userId: req.session.user.id
-                }
-            })
-        })
-        .then(shoes=>{
-            res.render('addToCart.ejs', {
-                
-            })
+        .then(([result, created])=>{
+            console.log(result, created)
+           if(!created) {
+               return result.increment('quantity',{by:1})
+                .then(()=>{
+                   console.log('asd')
+                    res.redirect('/shoes')
+                 })
+                 .catch((err) => {
+                     res.send(err)
+                 })
+           } else {
+               console.log('gk masuk')
+               res.redirect('/shoes')        
+           }
         })
         .catch(err =>{
             res.send(err)
