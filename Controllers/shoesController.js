@@ -1,5 +1,9 @@
 const Model = require('../models/index')
+
 const UserController = require('../Controllers/userController')
+
+const formatMoney = require('../helpers/formatMoney')
+
 
 class ShoesController {
     static readShoes(req,res) {
@@ -7,7 +11,8 @@ class ShoesController {
             .then((data) => {
                 res.render('shoes.ejs',{
                     data: data,
-                    brand: 'Shoes'
+                    brand: 'Shoes',
+                    formatMoney:formatMoney
                 })
             })
             .catch((err) => {
@@ -26,6 +31,7 @@ class ShoesController {
                 res.render('shoes.ejs', {
                     data: shoes,
                     brand: req.params.brand,
+                    formatMoney:formatMoney
                 })
             })
             .catch(err=>{
@@ -43,6 +49,7 @@ class ShoesController {
                 res.render('shoes.ejs', {
                     data: shoes,
                     brand: 'Shoes',
+                    formatMoney:formatMoney
                 })
             })
             .catch(err=>{
@@ -61,7 +68,8 @@ class ShoesController {
                 res.render('shoes.ejs', {
                     data: shoes,
                     brand: req.params.brand,
-                    type: req.params.type
+                    type: req.params.type,
+                    formatMoney:formatMoney
                 })
             })
             .catch(err =>{
