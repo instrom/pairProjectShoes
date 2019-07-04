@@ -1,6 +1,7 @@
 const Model = require('../models/index')
 const sessionChecker = require('../middlewares/sessionChecker')
 const bcrypt = require('bcrypt')
+const Shoe = Model.Shoe
 
 class UserController {
     static createUser(req,res) {
@@ -93,7 +94,65 @@ class UserController {
     }
 
     static addToCart(req,res) {
-      res.render('addToCart.ejs')
+        Model.ShoesUser.findAll({
+            order: [
+                ['id', 'ASC']
+            ],
+            include: [Shoe]
+        })
+        .then(data=>{
+            // res.send(data)
+            res.render('addToCart.ejs', {
+                data:data
+            })
+        })
+        .catch(err=>{
+            res.send(err)
+        })
+    }
+
+    static increaseQuantity(req,res){
+        Model.ShoesUser.increment(['quantity'], {
+            by:1,
+            where: {
+                id: req.params.shoesUserId
+            }
+        })
+            .then(data=>{
+                UserController.addToCart(req,res)
+            })
+            .catch(err=>{
+                res.send(err)
+            })
+    }
+
+    static decreaseQuantity(req,res){
+        Model.ShoesUser.decrement(['quantity'], {
+            by:1,
+            where: {
+                id: req.params.shoesUserId
+            }
+        })
+            .then(data=>{
+                UserController.addToCart(req,res)
+            })
+            .catch(err=>{
+                res.send(err)
+            })
+    }
+
+    static delete(req,res){
+        Model.ShoesUser.destroy({
+            where: {
+                id: req.params.shoesUserId
+            }
+        })
+        .then(data => {
+            UserController.addToCart(req,res)
+        })
+        .catch(err => {
+            res.send(err)
+        })
     }
 
 }
