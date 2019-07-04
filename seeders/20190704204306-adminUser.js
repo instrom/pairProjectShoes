@@ -13,9 +13,9 @@ module.exports = {
       }], {});
     */
       return queryInterface.bulkInsert('Users',[{
-        username: 'instrom',
+        username: 'instrom7',
         email:'tommysutjipto96@gmail.com',
-        password: 12345,
+        password: '$2b$10$QIbmFNLUVyO/cZoIvBfGwO8jAQbBb1RYL5bY9zhvSH8PCMWves6fa',
         isAdmin: true,
         balance: 1000000,
         confirmed: true,
