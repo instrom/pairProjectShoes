@@ -4,9 +4,9 @@ const cekAdmin = require('../middlewares/cekAdmin')
 const userLogin = require('../middlewares/userLogin')
 
 router.get('/', ShoesController.readShoes)
-router.get('/add', (req, res)=>{
+router.get('/add', userLogin,cekAdmin, (req, res)=>{
     res.render('addShoes.ejs')
-} )
+})
 router.post('/add', userLogin, cekAdmin, ShoesController.create)
 router.get('/edit/:id', userLogin, cekAdmin, ShoesController.getEditPage)
 router.post('/edit/:id', userLogin, cekAdmin, ShoesController.edit)

@@ -2,7 +2,8 @@
 module.exports = (sequelize, DataTypes) => {
   class Shoe extends sequelize.Sequelize.Model {
     static associate(models){
-      Shoe.belongsToMany(models.Order,{through: 'ShoesOrders'} )
+      Shoe.belongsToMany(models.Order,{through: 'ShoesOrders'})
+      Shoe.belongsToMany(models.User,{through: 'ShoesUsers'})
     }
   }
   Shoe.init({

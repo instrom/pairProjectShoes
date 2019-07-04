@@ -13,7 +13,7 @@ app.use(session({
   resave:false,
   saveUninitialized:true,
   cookie: {
-    maxAge: 10000000000000000000
+    maxAge: 1000000000000000000
   }
 }))
 const shoesRouter = require('./routers/shoesRouter')
