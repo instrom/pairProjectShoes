@@ -14,6 +14,7 @@ class ShoesController {
             })
     }
 
+
     static readBrand(req,res){
         Model.Shoe.findAll({
             where: {
@@ -75,6 +76,29 @@ class ShoesController {
             .catch(err=>{
                 res.send(err)
             })
+    }
+
+    static addToCart(req,res){
+        Model.ShoesUser.create({
+            UserId: req.session.user.id,
+            ShoeId: req.params.shoeId,
+            quantity: 1
+        })
+        .then(shoes=>{
+            return Model.ShoesUser.findAll({
+                where:{
+                    userId: req.session.user.id
+                }
+            })
+        })
+        .then(shoes=>{
+            res.render('addToCart.ejs', {
+                
+            })
+        })
+        .catch(err =>{
+            res.send(err)
+        })
     }
 
     static getEditPage(req,res){
