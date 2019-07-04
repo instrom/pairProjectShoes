@@ -13,11 +13,11 @@
 <body>
         <%- include ./partials/navbar.ejs %>
     <h1>
-        halaman add to Cart
+        Cart
     </h1>
     <% if (flash.info) { %>
         <h4><%= flash.info %></h4>
-        <h5><a href="/user/balance/<%=id%>">top up</a></h5>
+        <h5><a href="/user/balance/<%=id%>">Top Up Balance</a></h5>
       <%}%>
     <div class="container">
             <table id="cart" class="table table-hover table-condensed">
@@ -35,11 +35,11 @@
                 <%for (product of data){%>
                                     <td data-th="Product">
                                         <div class="row">
-                                            <div class="col-sm-2 hidden-xs"><img src="http://placehold.it/100x100" alt="..." class="img-responsive"/></div>
+                                            <div class="col-sm-2 hidden-xs"><img src="../images/shoes/<%=product.dataValues.name%>.jpg" alt="..." class="img-responsive"/></div>
                                             <div class="col-sm-10">
                 
                                                 <h4 class="nomargin"><%=product.dataValues.Shoe.name%></h4>
-                                                <p><%= product.dataValues.Shoe.name + product.dataValues.Shoe.type + "Shoes"%></p>
+                                                <p><%= product.dataValues.Shoe.name +" "+ product.dataValues.Shoe.type + " Shoes"%></p>
                                             </div>
                                         </div>
                                     </td>

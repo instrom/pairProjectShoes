@@ -97,23 +97,23 @@ class UserController {
     }
 
     static addToCart(req,res) {
-        let total = Model.ShoesUser.getTotalPrice(req,res)
-                
+        let total = Model.ShoesUser.getTotalPrice(req,res)                
         let all = Model.ShoesUser.findAll({
             order: [
                 ['id', 'ASC']
             ],
             include: [Shoe]
-        })
+        })        
+        let user = Model.User.findByPk(req.session.user.id)
 
-        Promise.all([total, all])
+        Promise.all([total, all, user])
         .then(values =>{
             res.render('addToCart.ejs', {
                 data: values[1],
                 total: values[0],
                 formatMoney:formatMoney,
                 flash: req.flash(),
-                balance: req.session.user.balance,
+                balance: values[2].dataValues.balance,
                 id:req.session.user.id
             })
         })
@@ -145,8 +145,7 @@ class UserController {
         })
         .catch(err=>{
             res.send(err)
-        })
-        
+        })     
             
     }
 
