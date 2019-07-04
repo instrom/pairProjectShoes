@@ -38,7 +38,12 @@ class UserController {
                     res.redirect('/user/login')
                    throw new Error(`password salah`)
                 } else {
-                    req.session.user = user.dataValues
+                    req.session.user = {
+                        id: user.id,
+                        username: user.username,
+                        email: user.email,
+                        balance: user.balance
+                    }
                     console.log(req.session.user)
                     res.redirect('/user/dashboard')
                 }
