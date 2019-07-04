@@ -88,7 +88,7 @@ class UserController {
     }
 
     static addToCart(req,res) {
-        Model.User.findOne({where:{id:req.params.id},include: []})
+      res.render('addToCart.ejs')
     }
 
 }
