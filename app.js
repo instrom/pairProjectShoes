@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const port = 3004
+const port = process.env.PORT || 4000
 const session = require('express-session')
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/Views'));
