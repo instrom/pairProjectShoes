@@ -12,7 +12,7 @@ router.get('/edit/:id', userLogin, cekAdmin, ShoesController.getEditPage)
 router.post('/edit/:id', userLogin, cekAdmin, ShoesController.edit)
 router.get('/delete/:id',  userLogin, cekAdmin, ShoesController.delete)
 router.get('/Shoes/:type', ShoesController.readType)
-router.get('/cart/:shoeId', userLogin, ShoesController.addToCart)
+router.get('/cart/:shoesId', userLogin, ShoesController.addToCart)
 router.get('/:brand', ShoesController.readBrand)
 router.get('/:brand/:type', ShoesController.readBrandType)
 
