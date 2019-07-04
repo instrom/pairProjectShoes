@@ -101,7 +101,6 @@ class UserController {
             include: [Shoe]
         })
         .then(data=>{
-            // res.send(data)
             res.render('addToCart.ejs', {
                 data:data
             })
@@ -112,33 +111,57 @@ class UserController {
     }
 
     static increaseQuantity(req,res){
-        Model.ShoesUser.increment(['quantity'], {
-            by:1,
-            where: {
-                id: req.params.shoesUserId
-            }
+        Model.Shoe.findByPk(req.params.ShoeId)
+        .then((shoe)=>{
+            return Model.ShoesUser.increment(['totalPrice'], {
+                by: shoe.price,
+                where: {
+                    id: req.params.shoesUserId
+                }
+            })
         })
-            .then(data=>{
-                UserController.addToCart(req,res)
+        .then(()=>{
+            return Model.ShoesUser.increment(['quantity'], {
+                by:1,
+                where: {
+                    id: req.params.shoesUserId
+                }
             })
-            .catch(err=>{
-                res.send(err)
-            })
+        })
+        .then(data=>{
+            UserController.addToCart(req,res)
+        })
+        .catch(err=>{
+            res.send(err)
+        })
+        
+            
     }
 
     static decreaseQuantity(req,res){
-        Model.ShoesUser.decrement(['quantity'], {
-            by:1,
-            where: {
-                id: req.params.shoesUserId
-            }
+        Model.Shoe.findByPk(req.params.ShoeId)
+        .then((shoe)=>{
+            return Model.ShoesUser.decrement(['totalPrice'], {
+                by: shoe.price,
+                where: {
+                    id: req.params.shoesUserId
+                }
+            })
         })
-            .then(data=>{
-                UserController.addToCart(req,res)
+        .then(()=>{
+            return Model.ShoesUser.decrement(['quantity'], {
+                by:1,
+                where: {
+                    id: req.params.shoesUserId
+                }
             })
-            .catch(err=>{
-                res.send(err)
-            })
+        })
+        .then(data=>{
+            UserController.addToCart(req,res)
+        })
+        .catch(err=>{
+            res.send(err)
+        })
     }
 
     static delete(req,res){
@@ -147,7 +170,21 @@ class UserController {
                 id: req.params.shoesUserId
             }
         })
-        .then(data => {
+        .then(() => {
+            UserController.addToCart(req,res)
+        })
+        .catch(err => {
+            res.send(err)
+        })
+    }
+
+    static clear(req,res){
+        Model.ShoesUser.destroy({
+            where:{
+                UserId : req.session.user.id
+            }
+        })
+        .then(() => {
             UserController.addToCart(req,res)
         })
         .catch(err => {

@@ -1,4 +1,5 @@
 const Model = require('../models/index')
+const UserController = require('../Controllers/userController')
 
 class ShoesController {
     static readShoes(req,res) {
@@ -79,34 +80,34 @@ class ShoesController {
     }
 
     static addToCart(req,res){
-        Model.ShoesUser.findOrCreate({
-            where:{
-                UserId : req.session.user.id,
-                ShoeId : req.params.shoesId,
-            },
-            defaults:{
-                quantity : 1
-            }
+        Model.Shoe.findByPk(req.params.shoesId)
+        .then(shoe =>{
+            console.log(shoe.dataValues)
+            Model.ShoesUser.findOrCreate({
+                where:{
+                    UserId : req.session.user.id,
+                    ShoeId : req.params.shoesId,
+                },
+                defaults:{
+                    quantity : 1,
+                    totalPrice: shoe.dataValues.price
+                }
+            })
+            .then(([result, created])=>{
+               if(!created) {
+                    UserController.addToCart(req,res)
+               } else {
+                   res.redirect('/shoes')        
+               }
+            })
+            .catch(err =>{
+                res.send(err)
+            })
         })
-        .then(([result, created])=>{
-            console.log(result, created)
-           if(!created) {
-               return result.increment('quantity',{by:1})
-                .then(()=>{
-                   console.log('asd')
-                    res.redirect('/shoes')
-                 })
-                 .catch((err) => {
-                     res.send(err)
-                 })
-           } else {
-               console.log('gk masuk')
-               res.redirect('/shoes')        
-           }
-        })
-        .catch(err =>{
+        .catch(err=>{
             res.send(err)
         })
+        
     }
 
     static getEditPage(req,res){
