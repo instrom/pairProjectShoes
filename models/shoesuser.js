@@ -7,17 +7,19 @@ module.exports = (sequelize, DataTypes) => {
      ShoesUser.belongsTo(models.User)
     }
 
-    // static getTotalPrice(){
-    //   ShoesUser.findAll()
-    //   .then(data=>{
-    //     data.forEach(el=>{
-          
-    //     })
-    //   })
-    //   .catch(err=>{
-    //     res.send(err)
-    //   })
-    // }
+    static getTotalPrice(req,res){
+      return ShoesUser.findAll()
+      .then(data=>{
+        let total = 0
+        data.forEach(element => {
+          total += element.dataValues.totalPrice
+        });
+        return total
+      })
+      .catch(err=>{
+        res.send(err)
+      })
+    }
   }
   ShoesUser.init({
     UserId: DataTypes.INTEGER,

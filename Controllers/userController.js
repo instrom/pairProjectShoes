@@ -97,15 +97,24 @@ class UserController {
     }
 
     static addToCart(req,res) {
-        Model.ShoesUser.findAll({
+        let total = Model.ShoesUser.getTotalPrice(req,res)
+                
+        let all = Model.ShoesUser.findAll({
             order: [
                 ['id', 'ASC']
             ],
             include: [Shoe]
         })
-        .then(data=>{
+
+        Promise.all([total, all])
+        .then(values =>{
             res.render('addToCart.ejs', {
-                data:data
+                data: values[1],
+                total: values[0],
+                formatMoney:formatMoney,
+                flash: req.flash(),
+                balance: req.session.user.balance,
+                id:req.session.user.id
             })
         })
         .catch(err=>{
@@ -182,17 +191,41 @@ class UserController {
     }
 
     static clear(req,res){
-        Model.ShoesUser.destroy({
-            where:{
-                UserId : req.session.user.id
-            }
+        let total = Model.ShoesUser.getTotalPrice()
+        let user = Model.User.findByPk(req.session.user.id)
+        Promise.all([total,user])
+        .then(values=>{
+            const total = values[0]
+            const user = values[1]
+            if(total > user.dataValues.balance){
+                req.flash('info', 'Not Enough Balance!')
+                res.redirect('/user/cart')
+            }else{
+                Model.User.decrement(['balance'],{
+                    by: total,
+                    where:{
+                        id: req.session.user.id
+                    }
+                })
+                .then(()=>{
+                    return Model.ShoesUser.destroy({
+                        where:{
+                            UserId : req.session.user.id
+                        }
+                    })
+                })
+                .then(() => {
+                    UserController.addToCart(req,res)
+                })
+                .catch(err => {
+                    res.send(err)
+                })  
+            }            
         })
-        .then(() => {
-            UserController.addToCart(req,res)
-        })
-        .catch(err => {
+        .catch(err=>{
             res.send(err)
         })
+              
     }
 
 }

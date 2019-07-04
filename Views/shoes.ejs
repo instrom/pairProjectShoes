@@ -35,6 +35,9 @@
                     <td><a href="/shoes/edit/<%=shoes.dataValues.id%>">| edit</a></td>
                 </tr>
                 <%}%> -->
+                <% if (flash.info) { %>
+                  <h4><%= flash.info %></h4>
+                <%}%>
                 
                 <div class="album py-5 bg-light">
                     <div class="container">
@@ -52,6 +55,7 @@
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-sm btn-outline-secondary"><a href="/shoes/cart/<%=shoes.dataValues.id%>">Add to Cart</a></button>
                                                 <button type="button" class="btn btn-sm btn-outline-secondary"><a href="/shoes/edit/<%=shoes.dataValues.id%>">Edit</a></button>
+                                                <button type="button" class="btn btn-sm btn-outline-secondary"><a href="/shoes/delete/<%=shoes.dataValues.id%>">Delete</a></button>
                                             </div>
                                             <small class="text-muted"></small>
                                         </div>

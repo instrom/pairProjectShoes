@@ -12,7 +12,8 @@ class ShoesController {
                 res.render('shoes.ejs',{
                     data: data,
                     brand: 'Shoes',
-                    formatMoney:formatMoney
+                    formatMoney:formatMoney,
+                    flash: req.flash()
                 })
             })
             .catch((err) => {
@@ -31,7 +32,8 @@ class ShoesController {
                 res.render('shoes.ejs', {
                     data: shoes,
                     brand: req.params.brand,
-                    formatMoney:formatMoney
+                    formatMoney:formatMoney,
+                    flash: req.flash()
                 })
             })
             .catch(err=>{
@@ -49,7 +51,8 @@ class ShoesController {
                 res.render('shoes.ejs', {
                     data: shoes,
                     brand: 'Shoes',
-                    formatMoney:formatMoney
+                    formatMoney:formatMoney,
+                    flash: req.flash()
                 })
             })
             .catch(err=>{
@@ -69,7 +72,8 @@ class ShoesController {
                     data: shoes,
                     brand: req.params.brand,
                     type: req.params.type,
-                    formatMoney:formatMoney
+                    formatMoney:formatMoney,
+                    flash: req.flash()
                 })
             })
             .catch(err =>{
@@ -90,7 +94,6 @@ class ShoesController {
     static addToCart(req,res){
         Model.Shoe.findByPk(req.params.shoesId)
         .then(shoe =>{
-            console.log(shoe.dataValues)
             Model.ShoesUser.findOrCreate({
                 where:{
                     UserId : req.session.user.id,
@@ -103,13 +106,30 @@ class ShoesController {
             })
             .then(([result, created])=>{
                if(!created) {
-                    UserController.addToCart(req,res)
+                 return Model.Shoe.findByPk(req.params.shoesId)
+                .then((shoe)=>{
+                    return Model.ShoesUser.increment(['totalPrice'], {
+                        by: shoe.dataValues.price,
+                        where: {
+                            ShoeId: req.params.shoesId
+                        }
+                    })
+                })
+                .then(()=>{
+                    return Model.ShoesUser.increment(['quantity'], {
+                        by:1,
+                        where: {
+                            ShoeId: req.params.shoesId
+                        }
+                    })
+                })
+                .then(()=>{
+                    req.flash('info', 'The Shoes has succesfully added to your Cart')
+                    res.redirect('/shoes')
+                })
                } else {
                    res.redirect('/shoes')        
                }
-            })
-            .catch(err =>{
-                res.send(err)
             })
         })
         .catch(err=>{

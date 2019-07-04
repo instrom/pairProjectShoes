@@ -15,6 +15,10 @@
     <h1>
         halaman add to Cart
     </h1>
+    <% if (flash.info) { %>
+        <h4><%= flash.info %></h4>
+        <h5><a href="/user/balance/<%=id%>">top up</a></h5>
+      <%}%>
     <div class="container">
             <table id="cart" class="table table-hover table-condensed">
                             <thead>
@@ -45,8 +49,12 @@
                                     </td>
                                     <td data-th="Subtotal" class="text-center">$<%=product.dataValues.totalPrice%></td>
                                     <td class="actions" data-th="">
-                                        <button class="btn btn-info btn-sm" onclick="window.location.href='/user/cart/decrease/<%=product.dataValues.id%>/<%=product.dataValues.Shoe.id%>';"><i class="fa fa-refresh"></i></button>
-                                        <button class="btn btn-info btn-sm" onclick="window.location.href='/user/cart/increase/<%=product.dataValues.id%>/<%=product.dataValues.Shoe.id%>';"><i class="fa fa-refresh"></i></button>
+                                        <%if(product.dataValues.quantity == 1){%>
+                                            <button class="btn btn-info btn-sm" onclick="window.location.href='/user/cart/delete/<%=product.dataValues.id%>';"><i class="fa fa-caret-down"></i></button>
+                                        <%}else{%>
+                                            <button class="btn btn-info btn-sm" onclick="window.location.href='/user/cart/decrease/<%=product.dataValues.id%>/<%=product.dataValues.Shoe.id%>';"><i class="fa fa-caret-down"></i></button>
+                                        <%}%>                                        
+                                        <button class="btn btn-info btn-sm" onclick="window.location.href='/user/cart/increase/<%=product.dataValues.id%>/<%=product.dataValues.Shoe.id%>';"><i class="fa fa-caret-up"></i></button>
                                         <button class="btn btn-danger btn-sm" onclick="window.location.href='/user/cart/delete/<%=product.dataValues.id%>';"><i class="fa fa-trash-o"></i></button>								
                                     </td>
                                 </tr>
@@ -54,12 +62,12 @@
                             </tbody>
                             <tfoot>
                                 <tr class="visible-xs">
-                                    <td class="text-center"><strong>Total </strong></td>
+                                    <td class="text-center"><strong>Your Balance <%=formatMoney.format(balance)%></strong></td>
                                 </tr>
                                 <tr>
                                     <td><a href="/shoes" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a></td>
                                     <td colspan="2" class="hidden-xs"></td>
-                                    <td class="hidden-xs text-center"><strong>Total </strong></td>
+                                    <td class="hidden-xs text-center"><strong>Total <%=formatMoney.format(total)%></strong></td>
                                     <td><a href="/user/cart/checkout" class="btn btn-success btn-block">Checkout <i class="fa fa-angle-right"></i></a></td>
                                 </tr>
                             </tfoot>
