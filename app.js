@@ -3,18 +3,6 @@ const app = express()
 const port = 3004
 const session = require('express-session')
 app.set('view engine', 'ejs');
-//multer
-var multer  = require('multer')
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, '/tmp/my-uploads')
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now())
-  }
-})
-var upload = multer({ storage: storage })
-//
 app.use(express.static(__dirname + '/Views'));
 app.use(express.urlencoded({ extended: false }));
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
@@ -30,7 +18,7 @@ app.use(session({
 }))
 const shoesRouter = require('./routers/shoesRouter')
 const userRouter = require('./routers/userRouter')
-app.get("/", (req, res) => { // halaman home
+app.get("/", (req, res) => {
     res.render("index.ejs")
 })
 app.use('/shoes',shoesRouter)
