@@ -11,4 +11,7 @@ router.get('/logout',userLogin,UserController.logout)
 router.get('/balance/:id',userLogin,UserController.balancePage)
 router.post('/balance/:id',userLogin,UserController.balancePagePost)
 router.get('/cart',userLogin,UserController.addToCart)
+router.get('/cart/delete/:shoesUserId',userLogin,UserController.delete)
+router.get('/cart/increase/:shoesUserId',userLogin,UserController.increaseQuantity)
+router.get('/cart/decrease/:shoesUserId',userLogin,UserController.decreaseQuantity)
 module.exports = router
