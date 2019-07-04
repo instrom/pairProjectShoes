@@ -127,8 +127,12 @@ class ShoesController {
                     req.flash('info', 'The Shoes has succesfully added to your Cart')
                     res.redirect('/shoes')
                 })
+                .catch(()=>{
+                    res.send(err)
+                })
                } else {
-                   res.redirect('/shoes')        
+                    req.flash('info', 'The Shoes has succesfully added to your Cart')
+                    res.redirect('/shoes')       
                }
             })
         })
@@ -171,7 +175,7 @@ class ShoesController {
     }
 
     static delete(req, res) {
-        Subject.destroy({
+        Model.Shoe.destroy({
                 where: {
                     id: req.params.id
                 }
