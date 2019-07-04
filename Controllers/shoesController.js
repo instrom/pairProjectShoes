@@ -4,7 +4,10 @@ class ShoesController {
     static readShoes(req,res) {
         Model.Shoe.findAll()
             .then((data) => {
-                res.render('shoes.ejs',{data:data})
+                res.render('shoes.ejs',{
+                    data: data,
+                    brand: 'Shoes'
+                })
             })
             .catch((err) => {
                 res.send(err)
@@ -18,7 +21,49 @@ class ShoesController {
             }
         })  
             .then(shoes =>{
-                res.render('shoes.ejs', {data: shoes})
+                res.render('shoes.ejs', {
+                    data: shoes,
+                    brand: req.params.brand,
+                })
+            })
+            .catch(err=>{
+                res.send(err)
+            })
+    }
+
+    static readType(req,res){
+        Model.Shoe.findAll({
+            where: {
+                type : req.params.type
+            }
+        })  
+            .then(shoes =>{
+                res.render('shoes.ejs', {
+                    data: shoes,
+                    brand: 'Shoes',
+                })
+            })
+            .catch(err=>{
+                res.send(err)
+            })
+    }
+
+    static readBrandType(req,res){
+        Model.Shoe.findAll({
+            where:{
+                brand: req.params.brand,
+                type: req.params.type
+            }
+        })
+            .then(shoes=>{
+                res.render('shoes.ejs', {
+                    data: shoes,
+                    brand: req.params.brand,
+                    type: req.params.type
+                })
+            })
+            .catch(err =>{
+                res.send(err)
             })
     }
 
@@ -33,7 +78,7 @@ class ShoesController {
     }
 
     static getEditPage(req,res){
-        Model.Shoe.findByPK(req.params.id)
+        Model.Shoe.findByPk(req.params.id)
             .then(data =>{
                 res.render('editShoes.ejs', {
                     data: data

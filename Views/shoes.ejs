@@ -13,7 +13,17 @@
 <body>
         <%- include ./partials/navbar.ejs %>
         <div class="container">
-            <h1> halaman shoes</h1>
+            <%if(brand){%>
+              <h1><%=brand%></h1> 
+            <%} else {%>
+            <h1>Shoes Collections</h1>
+            <%}%>
+            <ul>
+                <li><a href='/shoes/<%=brand%>/Running'> Running</a></li>
+                <li><a href='/shoes/<%=brand%>/Basketball'>Basketball</a></li>
+                <li><a href='/shoes/<%=brand%>/Soccer'>Soccer</a></li>
+                <li><a href='/shoes/<%=brand%>/Casual'>Casual</a></li>
+            </ul>
             <table>
                 <tr>
                     <th>name</th>
@@ -28,6 +38,7 @@
                         <td><%= shoes.dataValues.brand%></td>
                         <td><%= shoes.dataValues.type%></td>
                         <td><%= shoes.dataValues.price%></td>
+                        <td><a href="/shoes/edit/<%=shoes.dataValues.id%>">edit</a></td>
                     </tr>
                     <%}%>
                 
