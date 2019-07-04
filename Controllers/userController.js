@@ -2,6 +2,7 @@ const Model = require('../models/index')
 const sessionChecker = require('../middlewares/sessionChecker')
 const formatMoney = require('../helpers/formatMoney')
 const bcrypt = require('bcrypt')
+const nodemailer = require("nodemailer");
 const Shoe = Model.Shoe
 
 class UserController {
