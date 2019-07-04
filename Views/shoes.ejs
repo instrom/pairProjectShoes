@@ -25,7 +25,7 @@
                   </div>
                 </section>
 
-                <%for( shoes of data ){%>
+                <!-- <%for( shoes of data ){%>
                 <td><%= shoes.dataValues.name%></td>
                 <tr>
                     <td><%= shoes.dataValues.brand%></td>
@@ -34,7 +34,7 @@
                     <td><a href="/shoes/cart/<%=shoes.dataValues.id%>">Add To Cart</a></td>                        
                     <td><a href="/shoes/edit/<%=shoes.dataValues.id%>">| edit</a></td>
                 </tr>
-                <%}%>
+                <%}%> -->
                 
                 <div class="album py-5 bg-light">
                     <div class="container">
@@ -43,11 +43,11 @@
                                 <%for(shoes of data) {%>
                             <div class="col-md-4">
                                 <div class="card mb-4 shadow-sm">
-                                    <img src="./images/<%=shoes.dataValues.name%>.jpg">
+                                    <img src="../images/shoes/<%=shoes.dataValues.name%>.jpg" width="100%" height="225">
                                     <!-- <svg class="bd-placeholder-img card-img-top imageShoes" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg> -->
                                     <div class="card-body">
                                         <h3 class="card-text text-center"><%=shoes.dataValues.name%></h3>
-                                        <h4 class="card-text text-center"><%=shoes.dataValues.price%></h4>
+                                        <h4 class="card-text text-center"><%=formatMoney.format(shoes.dataValues.price)%></h4>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-sm btn-outline-secondary"><a href="/shoes/cart/<%=shoes.dataValues.id%>">Add to Cart</a></button>

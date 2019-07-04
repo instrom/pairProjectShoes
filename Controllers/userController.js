@@ -1,5 +1,6 @@
 const Model = require('../models/index')
 const sessionChecker = require('../middlewares/sessionChecker')
+const formatMoney = require('../helpers/formatMoney')
 const bcrypt = require('bcrypt')
 const Shoe = Model.Shoe
 
@@ -43,7 +44,8 @@ class UserController {
                         id: user.id,
                         username: user.username,
                         email: user.email,
-                        balance: user.balance
+                        balance: user.balance,
+                        isAdmin: user.isAdmin
                     }
                     console.log(req.session.user)
                     res.redirect('/user/dashboard')
@@ -61,7 +63,7 @@ class UserController {
             }
         })
             .then((dataUser) => {
-                res.render('dashboard.ejs',{dataUser:dataUser})
+                res.render('dashboard.ejs',{dataUser:dataUser,formatMoney:formatMoney})
             })
             .catch((err) => {
                 res.send(err)
@@ -76,7 +78,7 @@ class UserController {
     static balancePage(req,res) {
        Model.User.findByPk(req.params.id)
         .then((dataUser) => {
-            res.render('balancePage.ejs',{dataUser:dataUser})
+            res.render('balancePage.ejs',{dataUser:dataUser,formatMoney:formatMoney})
         })
         .catch((err) => {
             res.send(err)
