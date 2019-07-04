@@ -1,14 +1,18 @@
 var nodemailer = require("nodemailer");
+require('dotenv').config()
 /*
     Here we are configuring our SMTP Server details.
     STMP is mail server which is responsible for sending and recieving email.
 */
-var smtpTransport = nodemailer.createTransport({
-    service: "Gmail",
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    host: 'smtp.gmail.com',
+    secure:false,
     auth: {
-        user: "tommysutjipto96@gmail.com",
-        pass: "Sumtingwong123"
+        type: 'login',
+        user: process.env.EMAIL,
+        pass: process.env.PASSWORD
     }
 });
 
-module.exports = smtpTransport
+module.exports = transporter

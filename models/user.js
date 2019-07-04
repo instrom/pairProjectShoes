@@ -26,7 +26,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     password: DataTypes.STRING,
     isAdmin: DataTypes.BOOLEAN,
-    balance: DataTypes.INTEGER
+    balance: DataTypes.INTEGER,
+    confirmed: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
   }, {
     sequelize,
     // options

@@ -29,7 +29,8 @@
                     <p>
                       <%=dataUser.dataValues.email%> <br>
                      www.hacktiv8.com <br>
-                      June 22, 1997
+                      June 22, 1997<br>
+                      <%=formatMoney.format(dataUser.dataValues.balance)%>
                     </p>
                     <a href="/user/balance/<%=dataUser.dataValues.id%>"> Top Up Balance</a>
                   </div>

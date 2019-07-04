@@ -2,7 +2,12 @@ const Model = require('../models/index')
 const sessionChecker = require('../middlewares/sessionChecker')
 const formatMoney = require('../helpers/formatMoney')
 const bcrypt = require('bcrypt')
-const nodemailer = require("nodemailer");
+const nodemailer = require("nodemailer")
+const jwt = require('jsonwebtoken')
+const _ = require('lodash')
+const transporter = require('../helpers/nodeMailer')
+require('dotenv').config()
+
 const Shoe = Model.Shoe
 
 class UserController {
@@ -16,15 +21,72 @@ class UserController {
             email:req.body.email,
             password:req.body.password,
             balance: 0,
-            isAdmin: false
+            isAdmin: false,
+            confirmed:false
         })
             .then((data) => {
-                res.redirect('/')
+                console.log(data)
+                // var smtpTransport = require('nodemailer-smtp-transport');
+                
+                // var transporter = nodemailer.createTransport({
+                //     service: 'gmail',
+                //     host: 'smtp.gmail.com',
+                //     secure:false,
+                //     auth: {
+                //         type: 'login',
+                //         user: 'tommysutjipto96@gmail.com',
+                //         pass: 'Sumtingwong123'
+                //     }
+                // });
+                // let mailOptions={
+                //     to : req.body.email,
+                //     subject : "Please confirm your Email account",
+                //     html : `Please click this email to confirm your email: <a href="localhost:3004/user/confirmEmail/req.body.username">disini</a>`,
+                // }
+                jwt.sign(
+                    {
+                      data: data.dataValues.id //foo:'bar' //data: data.dataValues.id
+                    },
+                    process.env.EMAILSECRET,
+                    {
+                      expiresIn: '1d',
+                    },
+                    (err, emailToken) => {
+                      const url = `http://localhost:3004/user/confirmation/${emailToken}`;
+                      transporter.sendMail({
+                        to: req.body.email,
+                        subject: 'Confirm Email',
+                        html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`,
+                      },(err,resolve) => {
+                          if(err) {
+                              console.log(err)
+                          } else {
+                              console.log('email sent')
+                              res.redirect('/user/login')
+                          }
+                      });
+                    },
+                  );
+                  res.redirect('/user/login')
+
             })
             .catch((err) => {
                 req.flash('errEmail',`${err.message}`)
                 res.redirect('/user/register')
             })
+    }
+
+    static confirmEmail(req,res) {
+            try {
+                const user = jwt.verify(req.params.token, process.env.EMAILSECRET); //decoded.foo == bar // user.data
+                // console.log(user)
+              Model.User.update({ confirmed: true }, { where: { id: user.data } });
+            //   console.log('asd');
+              res.redirect('/user/login')
+            } catch (e) {
+              res.send('error');
+            }
+            // res.redirect('/user/login');;
     }
 
     static loginUser(req,res) {
@@ -40,16 +102,19 @@ class UserController {
                 } else if (!bcrypt.compareSync(req.body.password,user.password)) {
                     res.redirect('/user/login')
                    throw new Error(`password salah`)
+                } else if(!user.confirmed) {
+                    res.reditect('/user/login')
+                    throw new Error(`belom confirm email`)
                 } else {
-                    req.session.user = {
-                        id: user.id,
-                        username: user.username,
-                        email: user.email,
-                        balance: user.balance,
-                        isAdmin: user.isAdmin
-                    }
-                    console.log(req.session.user)
-                    res.redirect('/user/dashboard')
+                        req.session.user = {
+                            id: user.id,
+                            username: user.username,
+                            email: user.email,
+                            balance: user.balance,
+                            isAdmin: user.isAdmin
+                        }
+                        console.log(req.session.user)
+                        res.redirect('/user/dashboard')
                 }
             })
             .catch((err) => {
