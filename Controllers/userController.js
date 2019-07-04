@@ -52,7 +52,7 @@ class UserController {
                       expiresIn: '1d',
                     },
                     (err, emailToken) => {
-                      const url = `http://localhost:3004/user/confirmation/${emailToken}`;
+                      const url = `https://tranquil-glacier-bay-69163.herokuapp.com/user/confirmation/${emailToken}`;
                       transporter.sendMail({
                         to: req.body.email,
                         subject: 'Confirm Email',
