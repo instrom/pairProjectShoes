@@ -13,7 +13,17 @@
 <body>
         <%- include ./partials/navbar.ejs %>
         <div class="container">
-            <h1> halaman shoes</h1>
+            <%if(brand){%>
+              <h1><%=brand%></h1> 
+            <%} else {%>
+            <h1>Shoes Collections</h1>
+            <%}%>
+            <ul>
+                <li><a href='/shoes/<%=brand%>/Running'> Running</a></li>
+                <li><a href='/shoes/<%=brand%>/Basketball'>Basketball</a></li>
+                <li><a href='/shoes/<%=brand%>/Soccer'>Soccer</a></li>
+                <li><a href='/shoes/<%=brand%>/Casual'>Casual</a></li>
+            </ul>
             <table>
                 <tr>
                     <th>name</th>
@@ -28,12 +38,13 @@
                         <td><%= shoes.dataValues.brand%></td>
                         <td><%= shoes.dataValues.type%></td>
                         <td><%= shoes.dataValues.price%></td>
+                        <td><a href="/shoes/edit/<%=shoes.dataValues.id%>">edit</a></td>
                     </tr>
                     <%}%>
                 
             </table>
         </div>
-        <a href = "shoes/add">add shoes</a>
+        <a href = "/shoes/add">add shoes</a>
     <script type="text/javascript" src='js/main.js'></script>
             <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
