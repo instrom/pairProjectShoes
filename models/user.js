@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
   class User extends sequelize.Sequelize.Model {
     static associate(models){
       User.hasMany(models.Order)
+      User.belongsToMany(models.Shoe, {through: 'ShoesUsers'})
     }
   }
   User.init({
