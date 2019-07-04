@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
       ShoesOrder.belongsTo(models.Shoe)
       ShoesOrder.belongsTo(models.Order)
     }
+
   }
   ShoesOrder.init({
     OrderId: DataTypes.INTEGER,
