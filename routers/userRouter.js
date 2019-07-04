@@ -16,5 +16,4 @@ router.get('/cart/delete/:shoesUserId',userLogin,UserController.delete)
 router.get('/cart/increase/:shoesUserId/:ShoeId',userLogin,UserController.increaseQuantity)
 router.get('/cart/decrease/:shoesUserId/:ShoeId',userLogin,UserController.decreaseQuantity)
 router.get('/cart/checkout',userLogin,UserController.clear)
-// router.get()
 module.exports = router
