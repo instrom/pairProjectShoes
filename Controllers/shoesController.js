@@ -181,6 +181,7 @@ class ShoesController {
                 }
             })
             .then(data=> {
+                req.flash('info','the Shoes has been deleted')
                 res.redirect('/shoes')
             })
             .catch(err => {

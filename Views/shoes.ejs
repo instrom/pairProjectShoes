@@ -11,7 +11,28 @@
     <title>Document</title>
 </head>
 <body>
+
         <%- include ./partials/navbar.ejs %>
+        <div class="container">
+        <li class="nav-item">
+            <div class="dropdown">
+              <a data-toggle ="dropdown" href="#" class="nav-link dropdown-toggle">Type</a>
+              <div class="dropdown-menu text-clipped">
+                  <a href="/shoes/<%=brand%>/Running" class="dropdown-item">Running</a>
+                  <a href="/shoes/<%=brand%>/Basketball" class="dropdown-item">Basketball</a>
+                  <a href="/shoes/<%=brand%>/Soccer" class="dropdown-item">Soccer</a>
+                  <a href="/shoes/<%=brand%>/Casual" class="dropdown-item">Casual</a>
+              </div>
+            </div>
+          </li>
+        </div>
+         
+        <div class="container">
+            <% if (flash.info) { %>
+              <h4 style="color:green; text-align: center"><%= flash.info %></h4>
+            <%}%>
+        </div>
+
         <main role="main">
                 <section class="jumbotron text-center" >
                     <div class="container">
@@ -35,9 +56,7 @@
                     <td><a href="/shoes/edit/<%=shoes.dataValues.id%>">| edit</a></td>
                 </tr>
                 <%}%> -->
-                <% if (flash.info) { %>
-                  <h4><%= flash.info %></h4>
-                <%}%>
+          
                 
                 <div class="album py-5 bg-light">
                     <div class="container">

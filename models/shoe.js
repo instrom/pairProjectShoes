@@ -6,10 +6,12 @@ module.exports = (sequelize, DataTypes) => {
       Shoe.belongsToMany(models.User,{through: 'ShoesUsers'})
     }
 
-    productStatus(){
+    isNewProduct(){
       const now = new Date()
       if(now - this.createdAt < 6.048e+8){
-        return 'New Product'
+        return true
+      } else {
+        return false
       }
     }
   } 
